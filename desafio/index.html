@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Hospital - A História dos Pacientes e Profissionais</title>
+
+</head>
+<body>
+
+    <h1>Bem-vindo ao Hospital!</h1>
+    <div id="resultados"></div>
+
+    <script>
+        class Pessoa {
+            constructor(nome) {
+                if (this.constructor === Pessoa) {
+                    throw new Error("Não é permitido registrar um novo paciente diretamente!");
+                }
+                this.nome = nome;
+            }
+
+            apresentar() {
+                return `Olá, meu nome é ${this.nome}.`;
+            }
+        }
+
+        class Paciente extends Pessoa {
+            constructor(nome, idade, medicoResponsavel) {
+                super(nome);
+                this.idade = idade;
+                this.medicoResponsavel = medicoResponsavel;
+            }
+
+            paciente() {
+                return `${this.nome} está sendo atendido pelo(a) Dr(a). ${this.medicoResponsavel.nome}.`;
+            }
+
+            apresentar() {
+                return `${super.apresentar()} Eu sou um paciente de ${this.idade} anos e estou sendo atendido pelo(a) Dr(a). ${this.medicoResponsavel.nome}.`;
+            }
+
+            interagirComMedico() {
+                return `${this.nome} pergunta ao(a) Dr(a). ${this.medicoResponsavel.nome}: "Como está a minha condição?"`;
+            }
+        }
+
+        class Diretor extends Pessoa {
+            constructor(nome, idade) {
+                super(nome);
+                this.idade = idade;
+            }
+
+            ensinar() {
+                return `${this.nome} está acompanhando seus funcionários para garantir que tudo corra bem no hospital.`;
+            }
+
+            apresentar() {
+                return `${super.apresentar()} Eu sou um dos diretores desse hospital, e tenho ${this.idade} anos. Minha principal responsabilidade é supervisionar o bom funcionamento do hospital.`;
+            }
+        }
+
+        class Funcionario {
+            constructor(nome, cargo) {
+                this.nome = nome;
+                this.cargo = cargo;
+            }
+
+            falar() {
+                return `${this.nome} é um ${this.cargo} e está cumprindo sua função no hospital.`;
+            }
+        }
+
+        class Medico extends Funcionario {
+            constructor(nome) {
+                super(nome, 'médico');
+            }
+
+            falar() {
+                return `${this.nome} está realizando uma cirurgia no coração do paciente com muita precisão.`;
+            }
+
+            realizarCirurgia(paciente) {
+                return `${this.nome} está realizando uma cirurgia delicada no paciente ${paciente.nome}.`;
+            }
+        }
+
+        class Enfermeiro extends Funcionario {
+            constructor(nome) {
+                super(nome, 'enfermeiro');
+            }
+
+            falar() {
+                return `${this.nome} está aplicando uma injeção no paciente para ajudá-lo a se recuperar mais rápido.`;
+            }
+
+            cuidarPaciente(paciente) {
+                return `${this.nome} está cuidando do paciente ${paciente.nome} e fornecendo a medicação necessária.`;
+            }
+        }
+
+        class Recepcionista extends Funcionario {
+            constructor(nome) {
+                super(nome, 'recepcionista');
+            }
+
+            falar() {
+                return `${this.nome} está recebendo os pacientes e fazendo as anotações necessárias para que o atendimento seja o mais rápido possível.`;
+            }
+
+            registrarEntrada(paciente) {
+                return `${this.nome} registrou a entrada do paciente ${paciente.nome} no sistema.`;
+            }
+        }
+
+        class Porcentagem {
+            #nota;
+
+            constructor(nome, idade, nota) {
+                this.nome = nome;
+                this.idade = idade;
+                this.#nota = nota;
+            }
+
+            porcen() {
+                return `${this.nome} está com medo da cirurgia, pois as chances de morrer são altas.`;
+            }
+
+            fatalidade() {
+                return `A chance do(a) ${this.nome} não resistir à cirurgia é: ${this.#nota}`;
+            }
+        }
+
+        // Instâncias dos objetos
+        const drCirilo = new Medico("Cirilo");
+        const enfermeiro = new Enfermeiro("Kokimoto");
+        const recepcionista = new Recepcionista("Joelma");
+
+        const lucas = new Paciente("Lucas", 18, drCirilo);
+        const julia = new Paciente("Julia", 17, drCirilo);
+        const beatriz = new Diretor("Beatriz", 28);
+        const joao = new Diretor("João", 35);
+
+        const aluno1 = new Porcentagem("João", 17, "90%");
+        const aluno2 = new Porcentagem("Maria", 19, "70%");
+
+        // Exibição da história na página HTML
+        const resultadosDiv = document.getElementById("resultados");
+
+        resultadosDiv.innerHTML = `
+            <div class="personagem">
+                <h2>Dr. Cirilo (Médico)</h2>
+                <p>${drCirilo.falar()}</p>
+                <p>${drCirilo.realizarCirurgia(lucas)}</p>
+            </div>
+            <div class="personagem">
+                <h2>Enfermeiro Kokimoto</h2>
+                <p>${enfermeiro.falar()}</p>
+                <p>${enfermeiro.cuidarPaciente(lucas)}</p>
+            </div>
+            <div class="personagem">
+                <h2>Recepcionista Joelma</h2>
+                <p>${recepcionista.falar()}</p>
+                <p>${recepcionista.registrarEntrada(lucas)}</p>
+            </div>
+            <div class="personagem">
+                <h2>Paciente Lucas</h2>
+                <p>${lucas.apresentar()}</p>
+                <p>${lucas.interagirComMedico()}</p>
+            </div>
+            <div class="personagem">
+                <h2>Paciente Julia</h2>
+                <p>${julia.apresentar()}</p>
+                <p>${julia.interagirComMedico()}</p>
+            </div>
+            <div class="personagem">
+                <h2>Diretora Beatriz</h2>
+                <p>${beatriz.apresentar()}</p>
+            </div>
+            <div class="personagem">
+                <h2>Diretor João</h2>
+                <p>${joao.apresentar()}</p>
+            </div>
+            <div class="resultado alerta">
+                <h3>Alerta de Cirurgia</h3>
+                <p>${aluno1.fatalidade()}</p>
+            </div>
+            <div class="resultado alerta">
+                <h3>Alerta de Cirurgia</h3>
+                <p>${aluno2.fatalidade()}</p>
+            </div>
+        `;
+    </script>
+
+</body>
+</html>
